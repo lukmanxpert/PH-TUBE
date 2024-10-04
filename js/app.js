@@ -1,3 +1,11 @@
+const getHr = (sec) => {
+  const getHr = parseInt(sec / 3600);
+  const leftSec = sec % 3600;
+  const getMnt = parseInt(leftSec / 60);
+  const availableSec = getMnt % 60;
+  return `${getHr}hr : ${getMnt}mnt : ${availableSec}sec ago`;
+  // return `${getHr}:${getSec} ago`
+};
 // load categories
 const loadCatagorys = () => {
   fetch("https://openapi.programming-hero.com/api/phero-tube/categories")
@@ -27,18 +35,29 @@ const displayVideos = (videos) => {
     const videoDiv = document.createElement("div");
     videoDiv.classList = "card-compact";
     videoDiv.innerHTML = `
-    <figure class="h-[200px]">
+    <figure class="h-[200px] relative">
     <img class="h-full w-full object-cover"
       src=${video.thumbnail}
       alt="Shoes" />
+      <p class="absolute bottom-2 right-2 bg-black text-white text-xs">${
+        video.others?.posted_date.length == 0
+          ? ""
+          : getHr(video.others?.posted_date)
+      }</p>
   </figure>
   <div class="pt-2 mb-4 flex gap-2">
     <div>
-        <img class="h-8 w-8 object-cover rounded-full" src=${video.authors[0].profile_picture}>
+        <img class="h-8 w-8 object-cover rounded-full" src=${
+          video.authors[0].profile_picture
+        }>
     </div>
     <div>
     <h3 class="font-bold text-lg">${video.title}</h3>
-    <p>${video.authors[0].profile_name}</p>
+    <p>${video.authors[0].profile_name} ${
+      video.authors[0].verified === true
+        ? '<img class="h-6 w-6 inline-block" src="https://img.icons8.com/?size=100&id=D9RtvkuOe31p&format=png&color=000000">'
+        : ""
+    } </p>
     <p>${video.others.views} views</p>
     </div>
   </div>
