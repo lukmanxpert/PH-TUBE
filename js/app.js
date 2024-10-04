@@ -6,7 +6,17 @@ const getHr = (sec) => {
   return `${getHr}hr : ${getMnt}mnt : ${availableSec}sec ago`;
   // return `${getHr}:${getSec} ago`
 };
-// load categories
+// functions for filter
+const showCategoriesVideos = (id) => {
+  fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
+    .then((res) => res.json())
+    .then((data) => {
+        console.log(data.category)
+        displayVideos(data.category)
+    })
+    .catch((err) => console.log(err));
+};
+// load categories create btn
 const loadCatagorys = () => {
   fetch("https://openapi.programming-hero.com/api/phero-tube/categories")
     .then((res) => res.json())
@@ -16,10 +26,11 @@ const loadCatagorys = () => {
 const displayCategories = (data) => {
   const categoriesDiv = document.getElementById("categories-div");
   data.forEach((categories) => {
-    const btn = document.createElement("button");
-    btn.classList = "btn";
-    btn.innerText = categories.category;
-    categoriesDiv.append(btn);
+    const btnContainer = document.createElement("div");
+    btnContainer.innerHTML = `
+    <button class="btn" onclick=(showCategoriesVideos(${categories.category_id}))>${categories.category}</button>
+    `;
+    categoriesDiv.append(btnContainer);
   });
 };
 // load videos
@@ -31,6 +42,7 @@ const loadVideos = () => {
 };
 const displayVideos = (videos) => {
   const videosSection = document.getElementById("videos-section");
+  videosSection.innerHTML = ""
   videos.forEach((video) => {
     const videoDiv = document.createElement("div");
     videoDiv.classList = "card-compact";
