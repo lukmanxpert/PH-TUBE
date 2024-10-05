@@ -11,8 +11,8 @@ const showCategoriesVideos = (id) => {
   fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
     .then((res) => res.json())
     .then((data) => {
-        console.log(data.category)
-        displayVideos(data.category)
+      console.log(data.category);
+      displayVideos(data.category);
     })
     .catch((err) => console.log(err));
 };
@@ -42,7 +42,19 @@ const loadVideos = () => {
 };
 const displayVideos = (videos) => {
   const videosSection = document.getElementById("videos-section");
-  videosSection.innerHTML = ""
+  videosSection.innerHTML = "";
+  if (videos.length == 0) {
+    videosSection.classList.remove("grid");
+    videosSection.innerHTML = `
+    <div class="flex flex-col min-h-[300px] justify-center items-center">
+    <img src="assets/Icon.png">
+    <h1 class="font-bold text-xl p-5">No Content Here in This Category</h1>
+    </div>
+    `;
+    return;
+  } else {
+    videosSection.classList.add("grid");
+  }
   videos.forEach((video) => {
     const videoDiv = document.createElement("div");
     videoDiv.classList = "card-compact";
